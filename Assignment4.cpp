@@ -1,3 +1,14 @@
+
+/*
+Dillan Poorman
+CSE310
+09/30/2020
+
+Main program for heaps.
+*/
+
+
+
 #include <iostream>
 #include <fstream>
 #include <string>
@@ -21,12 +32,12 @@ int main() {
 
     while (true) {
 
-        
+        //command get passed to String handler function
         command = nextCommand(&n, &index, &newCost, &printCommand, &newProjName);
         
 
 
-
+        //checks command for create, checks for a valid heap capacity 
         if (command == "create") {
             cout << "Next Command: " << command << " " << n << endl;
             if(n >= 0){
@@ -38,7 +49,7 @@ int main() {
             
         }
 
-
+        //checks command for print, then checks for a heap
         if (command == "print") {
             cout << "Next Command: " << command << endl;
 
@@ -50,7 +61,7 @@ int main() {
             }
         }
 
-
+        //checks command for fileread then check for heap, and then checks to see if there's a valid heap capacity
         if (command == "fileread") {
 
 
@@ -59,28 +70,32 @@ int main() {
                 cout << "Error: heap not created" << endl;
             }
             else {
-                Project* arr = new Project[ n + 2 ];
+                Project* arr = new Project[ n + 1 ];
                 ifstream file;
                 file.open("heapInfo.txt");
                 if (file.is_open()) {
                     
                     file >> n;
-                    
-                    for (int i = 1; i < n + 1; i++) {
+
+                    if(n > heap.maxSize){
+                        cout << "Error: array size exceeds heap capacity" << endl;
+                        continue;
+                    }else{
+
+                        for (int i = 1; i < n + 1; i++) {
                         
                         file >> arr[i].projName >> arr[i].cost;
 
+                        }
+                        heap.buildMaxHeap(arr, n);
                     }
                     file.close();
-                    if(n > heap.maxSize){
-                        cout << "Error: array size exceeds heap capacity" << endl;
-                        
-                    }
-                    else{
-                        
-                        heap.buildMaxHeap(arr, n);
+                    
+                    
+                    
+                    
             
-                    }
+                    
                 }   
 
                 delete[] arr;
@@ -89,6 +104,7 @@ int main() {
             }
         }
 
+        //checks command for extract max
         if (command == "extractmax") {
             cin >> printCommand;
             
@@ -113,6 +129,7 @@ int main() {
             return 0;
         }
 
+        //checks for insert, then checks to see if new cost is valie
         if (command == "insert") {
             cout << "Next Command: " << command << " " << newProjName << " " << newCost << " " << printCommand << endl;
             if (newCost <= 0) {
@@ -125,6 +142,7 @@ int main() {
             }
         }
 
+        //checks for command, the checks for correct values happens in MaxHeap.cpp
         if (command == "increase") {
 
             cout << "Next Command: " << command << " " << index << " " << newCost << " " << printCommand << endl;
@@ -149,6 +167,7 @@ string nextCommand(int* n, int* index, int* newCost, string* printCommand, strin
 
     while (true) {
 
+        //sets command to lower
         cin >> command;
         transform(command.begin(), command.end(), command.begin(), ::tolower);
         //empty space, tab, return
@@ -166,13 +185,8 @@ string nextCommand(int* n, int* index, int* newCost, string* printCommand, strin
 
             cin >> *newProjName;
             cin >> temp;
-            if (regex_match(temp, regex("^[0-9]*$"))) {
-
-                *newCost = stoi(temp);
-            }
-            else {
-                *newCost = 0;
-            }
+            
+            isInteger(temp, newCost);
 
             cin >> *printCommand;
 
@@ -182,7 +196,7 @@ string nextCommand(int* n, int* index, int* newCost, string* printCommand, strin
 
         }
 
-        //COMPLETE OTHER CASES
+        
         if (command == "create") {
             string temp;
             cin >> temp;
@@ -220,6 +234,7 @@ string nextCommand(int* n, int* index, int* newCost, string* printCommand, strin
     return command;
 }
 
+//uses regular expression to check for natural numbers, return set n to -1 to trigger above handling
 void isInteger(string temp, int *n){
 
     if (regex_match(temp, regex("^[+-]?[0-9]+$"))) {
@@ -227,6 +242,6 @@ void isInteger(string temp, int *n){
                 *n = stoi(temp);
             }
             else {
-                *n = 0;
+                *n = -1;
             }
 }
