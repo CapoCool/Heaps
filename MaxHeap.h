@@ -1,3 +1,12 @@
+/*
+Dillan Poorman
+CSE310
+09/30/2020
+
+Header file for MaxHeap
+
+*/
+
 #ifndef MAXHEAP_H
 #define MAXHEAP_H
 
@@ -33,5 +42,7 @@ class MaxHeap {
     void increaseKey(int index, int newCost, string print);
 
 };
+
+#endif 
 
 #endif 
