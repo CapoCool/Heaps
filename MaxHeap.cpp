@@ -1,3 +1,11 @@
+/*
+Dillan Poorman
+CSE310
+09/30/2020
+
+MaxHeap program that sets up, builds, and manipulates the heap
+*/
+
 #include <iostream>
 #include <iomanip>
 #include <string>
@@ -6,14 +14,18 @@
 
 using namespace std;
 
-
+//constructor for MaxHeap sets variable and list
 MaxHeap::MaxHeap(){
     projectList = NULL;
+    currentSize = 0;
+    maxSize = 0;
 }
+
+//destructor for make heap, deletes projectList
 MaxHeap::~MaxHeap(){
     delete[] projectList;
 }
-//creates a new project array
+//creates a new project array by taking in the size
 void MaxHeap::create(int n)
 {
     projectList = new Project[n + 1];
@@ -55,6 +67,7 @@ void MaxHeap::heapify(Project* list, int index) {
 void MaxHeap::buildMaxHeap(Project* otherList, int sizeOfOtherList)
 {
     //sets otherList to projectList, in out case, project list is assigned to arr in Assignment4.cpp
+    
     for(int i = 1; i < sizeOfOtherList + 1 ; i++){
         projectList[i] = otherList[i];
     }
@@ -64,13 +77,14 @@ void MaxHeap::buildMaxHeap(Project* otherList, int sizeOfOtherList)
     currentSize = sizeOfOtherList;
 
 
-
+    //loop that sends indices through heapify, started from the bottom, now we're a max heap
     for (int i = floor((sizeOfOtherList / 2)); i > 0; i--) {
         heapify(projectList, i);
 
     }
 }
 
+//prints Maxheap in a very specific manner
 void MaxHeap::printMaxHeap()
 {
     if (projectList == NULL)
@@ -109,7 +123,7 @@ void MaxHeap::printMaxHeap()
     }
 }
 
-//Function for swapping objects, I have this here as a helper function
+//Function for swapping objects, I have this here as a helper function.
 void MaxHeap::exchange(Project* proj1, Project* proj2)
 {
     Project temp = *proj1;
@@ -145,6 +159,8 @@ void MaxHeap::arraySizeIncrease(){
      
 }
 
+//Max heap insert, checks for a null list, then checks print statements, increases currentSize by one, sets the 
+//element to the end and then increases the key to keep max heap properties
 void MaxHeap::maxHeapInsert(string newProjectName, int newCost, string print)
 {
 
@@ -193,6 +209,7 @@ void MaxHeap::maxHeapInsert(string newProjectName, int newCost, string print)
     }
 }
 
+//extracts the root then passes the list to heapify to maintain heap property
 int MaxHeap::extractMax(string print)
 {
     int max = 0;
@@ -236,6 +253,7 @@ int MaxHeap::extractMax(string print)
     return max;
 }
 
+//increases the key of a given index and then goes through a while loop that maintains heap property
 void MaxHeap::increaseKey(int index, int newCost, string print)
 {
     
@@ -282,4 +300,3 @@ void MaxHeap::increaseKey(int index, int newCost, string print)
         cout << "Error: invalid print command" << endl;
     }
 }
-
